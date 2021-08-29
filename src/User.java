@@ -58,6 +58,6 @@ public class User {
 
     public void sendMessage(String receiverName, String message) {
         Message messageObj = new Message(receiverName,"How are you doing today");
-        Chat chat = new Chat();
+        Chat chat = new Chat(messageObj);
     }
 }
