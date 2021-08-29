@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class User {
     private String username;
@@ -9,7 +6,7 @@ public class User {
     private String password;
 
 
-    List<User> friends = new ArrayList<>();
+    Map<String,User> friends = new HashMap<>();
     List<FriendRequest> receivedFriendRequests = new ArrayList<>();
     List<FriendRequest> sentFriendRequests = new ArrayList<>();
     Map<String, Chat> chats = new HashMap<>();
@@ -34,7 +31,33 @@ public class User {
         return password;
     }
 
-    public void sendFriendRequestTo(User user1) {
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 
+    public void sendFriendRequest(User receiver) {
+        FriendRequest friendRequest = new FriendRequest(this,receiver);
+        Platform.sendRequest(friendRequest);
+    }
+
+    public void acceptFriendRequest(String senderName) {
+        Platform.acceptFriendRequest(this,senderName);
+    }
+
+    public int getNumberOfFriends() {
+        return friends.size();
+    }
+
+    public void rejectFriendRequest(String senderName) {
+        Platform.rejectFriendRequest(this,senderName);
+    }
+
+    public void sendMessage(String receiverName, String message) {
+        Message messageObj = new Message(receiverName,"How are you doing today");
+        Chat chat = new Chat();
     }
 }

@@ -1,54 +1,70 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+
+import static javax.sound.midi.MidiSystem.getReceiver;
 
 public class Platform {
-    Set<User> registeredUsers = new HashSet<>();
+    static HashMap<String,User> registeredUsers = new HashMap<>();
 
-    public void register(User user) throws UserAlreadyExistException {
-        if (registeredUsers.contains(user)) {
-            throw new UserAlreadyExistException("User already exist");
-        } else {
-            registeredUsers.add(user);
-        }
+    public static void register(User user) throws UserAlreadyExistException {
+       if (registeredUsers.containsKey(user.getUsername())){
+           throw new UserAlreadyExistException("This user already exist");
+       }else{
+           registeredUsers.put(user.getUsername(),user);
+       }
+
     }
 
-    public int getNumberOfRegisteredUsers() {
+    public static int getNumberOfRegisteredUsers() {
         return registeredUsers.size();
     }
 
-    public void register(String username, String email, String password) throws UserAlreadyExistException {
+    public static void register(String username, String email, String password) throws UserAlreadyExistException {
         User user = new User(username, email, password);
-        for (User u : registeredUsers) {
-            if (u.getUsername().equals(username)) {
-                throw new UserAlreadyExistException("Username already exist");
-            } else {
-                registeredUsers.add(user);
-            }
+        if (registeredUsers.containsKey(user.getUsername())){
+            throw new UserAlreadyExistException(username + " already exist");
+        } else {
+          registeredUsers.put(user.getUsername(),user);
         }
     }
 
-//    public User getUsername(String userName) throws UserDoesNotExistException {
-//        User user = null;
-//        for (User u : registeredUsers) {
-//            if (u.getUsername().equals(userName)) {
-//                user = u;
-//            } else {
-//                throw new UserDoesNotExistException();
-//            }
-//        }
-//        return user;
-//    }
-    public String getUsername(String userName) throws UserDoesNotExistException {
-        String name = null;
-        for (User u : registeredUsers) {
-            if (u.getUsername().equals(userName)) {
-                System.out.println(u.getUsername().equals(userName));
-                name = u.getUsername();
-            } else {
-                throw new UserDoesNotExistException();
-            }
+
+    public static User getUsername(String userName) throws UserDoesNotExistException {
+        User user;
+       if (registeredUsers.containsKey(userName)){
+           user = registeredUsers.get(userName);
+        } else {
+           throw new UserDoesNotExistException("user nor found");
+       }
+       return user;
+    }
+
+    public static void sendRequest(FriendRequest friendRequest) {
+        if(registeredUsers.containsKey(friendRequest.getReceiver().getUsername())){
+            friendRequest.getSender().sentFriendRequests.add(friendRequest);
+            friendRequest.getReceiver().receivedFriendRequests.add(friendRequest);
         }
-        return name;
+    }
+
+    public static void acceptFriendRequest(User receiver, String senderName) {
+        for (FriendRequest u : receiver.receivedFriendRequests){
+            if(u.getSender().getUsername().equals(senderName)){
+                User friend = u.getSender();
+                receiver.receivedFriendRequests.remove(u);
+                receiver.friends.put(senderName,friend);
+                friend.sentFriendRequests.remove(u);
+                friend.friends.put(receiver.getUsername(),receiver);
+            }break;
+        }
+    }
+
+    public static void rejectFriendRequest(User receiver, String senderName) {
+        for (FriendRequest u : receiver.receivedFriendRequests){
+            if(u.getSender().getUsername().equals(senderName)){
+                User enemy = u.getSender();
+                receiver.receivedFriendRequests.remove(u);
+                enemy.sentFriendRequests.remove(u);
+            }break;
+        }
     }
 }
 
