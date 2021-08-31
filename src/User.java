@@ -56,8 +56,15 @@ public class User {
         Platform.rejectFriendRequest(this,senderName);
     }
 
+    public Chat createChat(String receiverName) {
+        return new Chat(this,receiverName);
+    }
+
     public void sendMessage(String receiverName, String message) {
-        Message messageObj = new Message(receiverName,"How are you doing today");
-        Chat chat = new Chat(messageObj);
+        if (friends.containsKey(receiverName)) {
+            Chat chat = createChat(receiverName);
+            chats.put(receiverName, chat);
+            Platform.sendMessage(chat, message);
+        }
     }
 }
