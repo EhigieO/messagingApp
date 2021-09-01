@@ -1,11 +1,9 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Chat {
-    private String receiverName;
-    private User sender;
+    private final String receiverName;
+    private final User sender;
     List<Message> messages = new ArrayList<>();
 
     public Chat(User sender, String receiverName) {
@@ -22,8 +20,8 @@ public class Chat {
     }
 
     public void add(String senderName, String message) {
-        Message messager = new Message(senderName,message);
-        messages.add(messager);
+        Message myMessage = new Message(senderName,message);
+        messages.add(myMessage);
     }
 
     @Override
@@ -34,4 +32,5 @@ public class Chat {
                 ", messages=" + messages +
                 '}';
     }
+
 }

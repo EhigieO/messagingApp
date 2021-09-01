@@ -1,7 +1,5 @@
 import java.util.HashMap;
 
-import static javax.sound.midi.MidiSystem.getReceiver;
-
 public class Platform {
     static HashMap<String, User> registeredUsers = new HashMap<>();
 

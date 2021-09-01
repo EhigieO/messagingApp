@@ -56,15 +56,27 @@ public class User {
         Platform.rejectFriendRequest(this,senderName);
     }
 
-    public Chat createChat(String receiverName) {
+    public Chat createChatFor(String receiverName) {
         return new Chat(this,receiverName);
     }
 
     public void sendMessage(String receiverName, String message) {
         if (friends.containsKey(receiverName)) {
-            Chat chat = createChat(receiverName);
-            chats.put(receiverName, chat);
+            Chat chat = createChatFor(receiverName);
             Platform.sendMessage(chat, message);
+            if(!chats.containsKey(receiverName)){
+                chats.put(receiverName,chat);
+            }
+            else {
+                chats.get(receiverName)
+                        .add(chats.get(receiverName)
+                                .getSender()
+                                .getUsername(), message);
+            }
         }
+    }
+
+    public Chat getChatWith(String friendName) {
+        return chats.get(friendName);
     }
 }

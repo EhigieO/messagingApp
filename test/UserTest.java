@@ -41,7 +41,7 @@ class UserTest {
     }
     @Test
     void userCanCreateChat(){
-        user.createChat("Sunny");
+        user.createChatFor("Sunny");
     }
     @Test
     void userCanSendMessage() throws UserAlreadyExistException {
@@ -54,6 +54,22 @@ class UserTest {
         user.sendMessage("sedge","Hi come help me here");
         assertEquals(1,user.chats.size());
         assertEquals(1,userNew.chats.size());
+    }
+    @Test
+    void userCanGetChats() throws UserAlreadyExistException {
+        User userNew= new User("sedge","sege@yahoo.com","queen10");
+        Platform.register(userNew);
+        Platform.register(user);
+        user.sendFriendRequest(userNew);
+        userNew.acceptFriendRequest("sade");
+        assertEquals(1,user.getNumberOfFriends());
+        user.sendMessage("sedge","Hi come help me here");
+        user.sendMessage("sedge","are you there");
+        assertEquals(1,user.chats.size());
+        assertEquals(1,userNew.chats.size());
+        System.out.println(user.getChatWith("sedge"));
+        System.out.println(userNew.getChatWith("sedge"));
+        //assertEquals(1,user.getChatWith("sedge"));
     }
 
 }
