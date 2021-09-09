@@ -68,8 +68,19 @@ class UserTest {
         assertEquals(1,user.chats.size());
         assertEquals(1,userNew.chats.size());
         System.out.println(user.getChatWith("sedge"));
-        System.out.println(userNew.getChatWith("sedge"));
+        System.out.println(userNew.getChatWith("sade"));
         //assertEquals(1,user.getChatWith("sedge"));
+    }
+    @Test
+    void userCanReceiveChat() throws UserAlreadyExistException {
+        User userNew= new User("sedge","sege@yahoo.com","queen10");
+        String message = "Hi come help me here";
+        Platform.register(userNew);
+        Platform.register(user);
+        user.sendFriendRequest(userNew);
+        userNew.acceptFriendRequest("sade");
+        user.sendMessage("sedge",message);
+        assertNotNull(userNew.chats);
     }
 
 }

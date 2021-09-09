@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class User {
-    private String username;
+    private String userName;
     private String email;
     private String password;
 
@@ -10,15 +10,16 @@ public class User {
     List<FriendRequest> receivedFriendRequests = new ArrayList<>();
     List<FriendRequest> sentFriendRequests = new ArrayList<>();
     Map<String, Chat> chats = new HashMap<>();
+    private boolean isLoggedIn;
 
-    public User(String username, String email, String password) {
-        this.username = username;
+    public User(String userName, String email, String password) {
+        this.userName = userName;
         this.email = email;
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
 
@@ -34,7 +35,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "username='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
@@ -63,20 +64,38 @@ public class User {
     public void sendMessage(String receiverName, String message) {
         if (friends.containsKey(receiverName)) {
             Chat chat = createChatFor(receiverName);
-            Platform.sendMessage(chat, message);
+            chat.add(receiverName,message);
+            friends.get(receiverName)
+                    .receiveMessage(this.userName,message,chat);
             if(!chats.containsKey(receiverName)){
                 chats.put(receiverName,chat);
             }
             else {
                 chats.get(receiverName)
-                        .add(chats.get(receiverName)
-                                .getSender()
-                                .getUsername(), message);
+                        .add(chat.getSender()
+                                .getUserName(), message);
             }
         }
     }
 
     public Chat getChatWith(String friendName) {
         return chats.get(friendName);
+    }
+
+    public void receiveMessage(String senderName, String message, Chat chat) {
+        if(chats.containsKey(senderName)){
+            chats.get(senderName)
+                    .add(senderName,message);
+        } else {
+            chats.put(senderName, chat);
+        }
+    }
+
+    public void login(String userName, String password) {
+        Platform.login(userName, password, this);
+    }
+
+    public void isLogin() {
+        isLoggedIn = true;
     }
 }

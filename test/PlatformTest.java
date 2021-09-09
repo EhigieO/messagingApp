@@ -49,4 +49,9 @@ class PlatformTest {
         Platform.sendRequest(friendRequest);
         assertEquals(1,user.sentFriendRequests.size());
     }
+    @Test
+    void userCanLogin(){
+        User user = new User("dan","dane@gmail.com","queen10");
+        user.login("dan", "queen10");
+    }
 }
