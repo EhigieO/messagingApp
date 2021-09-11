@@ -1,8 +1,13 @@
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.security.SecureRandom;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.runners.model.MultipleFailureException.assertEmpty;
 
 class UserTest {
+
     User user = new User("sade","sade@yahoo.com","queen10");
     @Test
     void userCanAddFriend() throws UserAlreadyExistException {
@@ -82,5 +87,85 @@ class UserTest {
         user.sendMessage("sedge",message);
         assertNotNull(userNew.chats);
     }
+    @Test
+    void userCanDeleteAMessage(){
+        User userNew= new User("sedge","sege@yahoo.com","queen10");
+        String message = "Hi come help me here";
+        try {
+            Platform.register(userNew);
+        } catch (UserAlreadyExistException e) {
+            e.printStackTrace();
+        }
+        try {
+            Platform.register(user);
+        } catch (UserAlreadyExistException e) {
+            e.printStackTrace();
+        }
+        user.sendFriendRequest(userNew);
+        userNew.acceptFriendRequest("sade");
+        assertEquals(0,user.chats.size());
+        user.sendMessage("sedge",message);
+        assertEquals(1,user.chats.size());
+        user.deleteMessage("sedge",0);
+        assertEquals(0,user.chats.get("sedge").messages.size());
+
+    }@Test
+    void userCanDeleteChat(){
+        User userNew= new User("sedge","sege@yahoo.com","queen10");
+        String message = "Hi come help me here";
+        try {
+            Platform.register(userNew);
+        } catch (UserAlreadyExistException e) {
+            e.printStackTrace();
+        }
+        try {
+            Platform.register(user);
+        } catch (UserAlreadyExistException e) {
+            e.printStackTrace();
+        }
+        user.sendFriendRequest(userNew);
+        userNew.acceptFriendRequest("sade");
+        assertEquals(0,user.chats.size());
+        user.sendMessage("sedge",message);
+        assertEquals(1,user.chats.size());
+        user.deleteChat("sedge");
+        assertEquals(0,user.chats.size());
+    }
+
+//    @Test
+//    void test(){
+//        System.out.println(randomGen());
+//    }
+//    public boolean randomGen(){
+//        int [][] numbers = {{1,2,4,3,5},{6,7,8,9},{10,21,10}};
+//        for (int i = 0; i < numbers.length; i ++){
+//            for (int j = 0; j < numbers[i].length; j++){
+//                System.out.printf("%5d",numbers[i][j]);
+//            }
+//            System.out.println();
+//        }
+//        return false;
+//    }
+//
+//    public int randomPrime(){
+//        SecureRandom random = new SecureRandom();
+//        int ranGen = 500000 + random.nextInt(1000001);
+//        boolean notFound = false;
+//        while (!notFound){
+//            for (int i = 2; i <= Math.sqrt(ranGen); i++) {
+//                if (ranGen % i != 0){
+//                    continue;
+//                }
+//                notFound= true;
+//            }
+//            if (notFound){
+//                return ranGen;
+//            }
+//            else{
+//                ranGen = 500000 + random.nextInt(1000001);
+//            }
+//        }
+//        return ranGen;
+//    }
 
 }

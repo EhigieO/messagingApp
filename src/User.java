@@ -11,6 +11,8 @@ public class User {
     List<FriendRequest> sentFriendRequests = new ArrayList<>();
     Map<String, Chat> chats = new HashMap<>();
     private boolean isLoggedIn;
+    private boolean isRead;
+
 
     public User(String userName, String email, String password) {
         this.userName = userName;
@@ -79,6 +81,7 @@ public class User {
     }
 
     public Chat getChatWith(String friendName) {
+        isRead = true;
         return chats.get(friendName);
     }
 
@@ -97,5 +100,13 @@ public class User {
 
     public void isLogin() {
         isLoggedIn = true;
+    }
+
+    public void deleteMessage(String friendName, int messageIndex) {
+        getChatWith(friendName).messages.remove(messageIndex);
+    }
+
+    public void deleteChat(String friendName) {
+        chats.remove(friendName);
     }
 }
