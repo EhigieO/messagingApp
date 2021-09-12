@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.model.MultipleFailureException.assertEmpty;
 
 class UserTest {
-
     User user = new User("sade","sade@yahoo.com","queen10");
+
     @Test
     void userCanAddFriend() throws UserAlreadyExistException {
         User friend = new User("danny","danny@yahoo.com","queen10");
@@ -26,6 +26,7 @@ class UserTest {
     void getPassword() {
 
     }
+
     @Test
     void acceptFriend() throws UserAlreadyExistException {
         User friend = new User("Blessing","blessing@yahoo.com","queen10");
@@ -35,6 +36,7 @@ class UserTest {
         assertEquals(1,user.getNumberOfFriends());
         assertEquals(1,friend.getNumberOfFriends());
     }
+
     @Test
     void userCanRejectFriendRequest() throws UserAlreadyExistException {
         User enemy = new User("solo","solo@gmaail.com","queen10");
@@ -44,10 +46,12 @@ class UserTest {
         assertEquals(0,enemy.sentFriendRequests.size());
         assertEquals(0,user.friends.size());
     }
+
     @Test
     void userCanCreateChat(){
         user.createChatFor("Sunny");
     }
+
     @Test
     void userCanSendMessage() throws UserAlreadyExistException {
         User userNew= new User("sedge","sege@yahoo.com","queen10");
@@ -60,6 +64,7 @@ class UserTest {
         assertEquals(1,user.chats.size());
         assertEquals(1,userNew.chats.size());
     }
+
     @Test
     void userCanGetChats() throws UserAlreadyExistException {
         User userNew= new User("sedge","sege@yahoo.com","queen10");
@@ -76,6 +81,7 @@ class UserTest {
         System.out.println(userNew.getChatWith("sade"));
         //assertEquals(1,user.getChatWith("sedge"));
     }
+
     @Test
     void userCanReceiveChat() throws UserAlreadyExistException {
         User userNew= new User("sedge","sege@yahoo.com","queen10");
@@ -87,6 +93,7 @@ class UserTest {
         user.sendMessage("sedge",message);
         assertNotNull(userNew.chats);
     }
+
     @Test
     void userCanDeleteAMessage(){
         User userNew= new User("sedge","sege@yahoo.com","queen10");
@@ -108,8 +115,9 @@ class UserTest {
         assertEquals(1,user.chats.size());
         user.deleteMessage("sedge",0);
         assertEquals(0,user.chats.get("sedge").messages.size());
+    }
 
-    }@Test
+    @Test
     void userCanDeleteChat(){
         User userNew= new User("sedge","sege@yahoo.com","queen10");
         String message = "Hi come help me here";
